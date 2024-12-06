@@ -3,9 +3,8 @@ import {
   Body,
   Controller,
   Get,
-  Param,
   Post,
-  ParseEnumPipe,
+  Query,
 } from '@nestjs/common';
 import { RatingsService } from './ratings.service';
 import { RatingPeriod } from './types/rating-period';
@@ -16,10 +15,8 @@ import { ObjectId } from 'mongodb';
 export class RatingsController {
   constructor(private readonly ratingsService: RatingsService) {}
 
-  @Get(':period')
-  async getAll(
-      @Param('period', new ParseEnumPipe(RatingPeriod)) period: RatingPeriod
-  ) {
+  @Get('all')
+  async getAll(@Query('period') period: RatingPeriod) {
     return await this.ratingsService.getAll(period);
   }
 

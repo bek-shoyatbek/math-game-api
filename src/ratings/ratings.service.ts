@@ -15,39 +15,43 @@ export class RatingsService {
     switch (period) {
       case RatingPeriod.DAILY:
         startDate = new Date(
-          currentDate.getFullYear(),
-          currentDate.getMonth(),
-          currentDate.getDate(),
+            currentDate.getFullYear(),
+            currentDate.getMonth(),
+            currentDate.getDate()
         );
         endDate = new Date(
-          currentDate.getFullYear(),
-          currentDate.getMonth(),
-          currentDate.getDate() + 1,
+            currentDate.getFullYear(),
+            currentDate.getMonth(),
+            currentDate.getDate() + 1
         );
         break;
       case RatingPeriod.WEEKLY:
         startDate = new Date(
-          currentDate.getFullYear(),
-          currentDate.getMonth(),
-          currentDate.getDate() - currentDate.getDay(),
+            currentDate.getFullYear(),
+            currentDate.getMonth(),
+            currentDate.getDate() - currentDate.getDay()
         );
         endDate = new Date(
-          currentDate.getFullYear(),
-          currentDate.getMonth(),
-          currentDate.getDate() - currentDate.getDay() + 7,
+            currentDate.getFullYear(),
+            currentDate.getMonth(),
+            currentDate.getDate() - currentDate.getDay() + 7
         );
         break;
       case RatingPeriod.MONTHLY:
         startDate = new Date(
-          currentDate.getFullYear(),
-          currentDate.getMonth(),
-          1,
+            currentDate.getFullYear(),
+            currentDate.getMonth(),
+            1
         );
         endDate = new Date(
-          currentDate.getFullYear(),
-          currentDate.getMonth() + 1,
-          1,
+            currentDate.getFullYear(),
+            currentDate.getMonth() + 1,
+            1
         );
+        break;
+      case RatingPeriod.ALL_TIME:
+        startDate = new Date(0); // Earliest possible date
+        endDate = new Date(); // Current date
         break;
       default:
         throw new BadRequestException('Invalid rating period');
@@ -68,12 +72,14 @@ export class RatingsService {
       },
     });
 
-    ratings?.map((rating, index) => {
-      rating.user.rating = index + 1;
-      return rating;
-    });
-
-    return ratings;
+    // Use map with index to assign rankings
+    return ratings.map((rating, index) => ({
+      ...rating,
+      user: {
+        ...rating.user,
+        ranking: index + 1,
+      },
+    }));
   }
 
   async saveNewRating(newRatingDto: NewRatingDto) {
