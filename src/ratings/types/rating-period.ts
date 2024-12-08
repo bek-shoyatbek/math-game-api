@@ -2,5 +2,5 @@ export enum RatingPeriod {
   DAILY = 'day',
   WEEKLY = 'week',
   MONTHLY = 'month',
-  ALL_TIME = 'all_time',
+  ALL_TIME = 'all',
 }
